@@ -40,6 +40,14 @@ driver = webdriver.Chrome(service=service, options=options)
 links = []
 details = []
 
+header_dictionary = {"대회명": "title", "대표자명": "owner",
+                    "E-mail": "email", "대회일시": "schedule",
+                    "전화번호": "contact", "대회종목": "course",
+                    "대회지역": "location", "대회장소": "venue",
+                    "주최단체": "host", "접수기간": "duration",
+                    "홈페이지": "homepage", "대회장": "venue_detail",
+                    "기타소개": "remark"}
+
 try:
     driver.get("http://www.roadrun.co.kr/schedule/list.php")
     # WebDriverWait를 사용하여 특정 요소가 나타날 때까지 최대 5초간 기다립니다.
@@ -76,6 +84,7 @@ try:
             rows = driver.find_elements(By.XPATH, "/html/body/table/tbody/tr/td/table[1]/tbody/tr")
             # 각 행(<tr>)을 순회하며 <td>의 텍스트를 추출
             detail = {}
+            logger.info(f'{len(rows)}개의 데이터를 찾았습니다.')
             for row in rows:
                 # 현재 행의 모든 헤더를 찾음
                 headers = row.find_elements(By.XPATH, "./td[1]")
@@ -85,14 +94,6 @@ try:
                 # <th>와 <td>의 텍스트를 출력
                 for header, value in zip(headers, values):
                     clean_value = re.sub(r'\n\d+km\n© NAVER Corp.', '', f"{value.text}")
-
-                    header_dictionary = {"대회명": "title", "대표자명": "owner",
-                                         "E-mail": "email", "대회일시": "schedule",
-                                         "전화번호": "contact", "대회종목": "course",
-                                         "대회지역": "location", "대회장소": "venue",
-                                         "주최단체": "host", "접수기간": "duration",
-                                         "홈페이지": "homepage", "대회장": "venue_detail",
-                                         "기타소개": "remark"}
                     detail[header_dictionary.get(f"{header.text}")] = clean_value.strip().lower()
                     detail['registered_at'] = datetime.now(KST).strftime("%Y-%m-%dT%H:%M:%S")
                     detail['is_deleted'] = False
