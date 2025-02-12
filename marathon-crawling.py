@@ -99,7 +99,7 @@ try:
             details.append(detail)
             time.sleep(5)
         else:
-            logger.info("Detail link not found.")
+            logger.warning("Detail link not found.")
 
     df = pd.DataFrame(details)
     df = df.drop_duplicates()
@@ -113,6 +113,8 @@ try:
     MYSQL_TABLE = os.environ.get('MYSQL_TABLE')
     
     connection_string = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}/{MYSQL_DATABASE}'
+
+    logger.info(f'Connecting to {connection_string}')
 
     db = create_engine(connection_string)
     
