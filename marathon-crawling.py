@@ -115,8 +115,6 @@ try:
     
     connection_string = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}/{MYSQL_DATABASE}'
 
-    logger.info(f'Connecting to {connection_string}')
-
     db = create_engine(connection_string)
     
     # 메타데이터 객체 생성
