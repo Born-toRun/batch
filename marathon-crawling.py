@@ -1,5 +1,5 @@
 import os
-from pandas.io import json
+import json
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -29,7 +29,7 @@ KST = timezone(timedelta(hours=9))
 # ChromeOptions 설정
 options = Options()
 
-OPTION_ARGUMENTS = json.loads(os.environ.get['OPTION_ARGUMENTS'])
+OPTION_ARGUMENTS = json.loads(os.environ.get('OPTION_ARGUMENTS'))
 
 for arg in OPTION_ARGUMENTS:
    options.add_argument(arg)
