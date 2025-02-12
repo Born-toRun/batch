@@ -109,7 +109,7 @@ try:
     MYSQL_HOSTNAME = os.environ.get('MYSQL_HOSTNAME')
     MYSQL_USER = os.environ.get('MYSQL_USER')
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD')
-    MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE')
+    MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE').replace('-', '_')
     MYSQL_TABLE = os.environ.get('MYSQL_TABLE')
     
     connection_string = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}/{MYSQL_DATABASE}'
