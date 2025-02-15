@@ -96,7 +96,6 @@ try:
                     clean_value = re.sub(r'\n\d+km\n© NAVER Corp.', '', f"{value.text}")
                     detail[header_dictionary.get(f"{header.text}")] = clean_value.strip().lower()
                     detail['registered_at'] = datetime.now(KST).strftime("%Y-%m-%dT%H:%M:%S")
-                    detail['is_deleted'] = False
             details.append(detail)
             time.sleep(5)
         else:
@@ -137,9 +136,8 @@ try:
                   Column('venue_detail', String(1024), nullable=True),
                   Column('remark', Text, nullable=True),
                   Column('registered_at', DateTime, nullable=False),
-                  Column('is_deleted', Boolean, nullable=False),
-                  Index('idx_location_course_is_deleted', 'location', 'course', 'is_deleted'),
-                  UniqueConstraint('title', 'owner', name='UK_title__owner')
+                  Index('idx__location__course', 'location', 'course'),
+                  UniqueConstraint('title', 'owner', name='uk__title__owner')
                   )
     # 테이블 생성
     metadata.create_all(db)
@@ -178,8 +176,7 @@ try:
               homepage=row['homepage'],
               venue_detail=row['venue_detail'],
               remark=row['remark'],
-              registered_at=row['registered_at'],
-              is_deleted=row['is_deleted']
+              registered_at=row['registered_at']
           ))
           logger.info(f"Succeed inserting row - title: {row['title']} & owner: {row['owner']}")
         except Exception as e:
