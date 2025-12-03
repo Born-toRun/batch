@@ -82,16 +82,6 @@ jobs:
                   "inline": true
                 },
                 {
-                  "name": "Branch",
-                  "value": "'"${{ github.ref_name }}"'",
-                  "inline": true
-                },
-                {
-                  "name": "Commit",
-                  "value": "['"${GITHUB_SHA:0:7}"']('"${{ github.event.head_commit.url }}"')",
-                  "inline": true
-                },
-                {
                   "name": "실행 시각",
                   "value": "'"$(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M:%S KST')"'",
                   "inline": false
