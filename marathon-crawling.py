@@ -115,12 +115,13 @@ try:
     df.to_csv(os.environ.get('OUTPUT_CSV_FILE_NAME'), index=False)
 
     MYSQL_HOSTNAME = os.environ.get('MYSQL_HOSTNAME')
+    MYSQL_PORT = os.environ.get('MYSQL_PORT', '3306')
     MYSQL_USER = os.environ.get('MYSQL_USER')
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD')
     MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE').replace('-', '_')
     MYSQL_TABLE = os.environ.get('MYSQL_TABLE')
-    
-    connection_string = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}/{MYSQL_DATABASE}'
+
+    connection_string = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}:{MYSQL_PORT}/{MYSQL_DATABASE}'
 
     db = create_engine(connection_string)
     
