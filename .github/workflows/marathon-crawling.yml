@@ -32,15 +32,25 @@ jobs:
         pip install -r requirements.txt
 
     - name: Create .env file from secrets
+      env:
+        MYSQL_HOSTNAME: ${{ secrets.MYSQL_HOSTNAME }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+        MYSQL_TABLE: ${{ secrets.MYSQL_TABLE }}
+        OPTION_ARGUMENTS: ${{ secrets.OPTION_ARGUMENTS }}
+        OUTPUT_CSV_FILE_NAME: ${{ secrets.OUTPUT_CSV_FILE_NAME }}
       run: |
-        echo "MYSQL_HOSTNAME=${{ secrets.MYSQL_HOSTNAME }}" >> .env
-        echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
-        echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
-        echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
-        echo "MYSQL_TABLE=${{ secrets.MYSQL_TABLE }}" >> .env
-        echo "OPTION_ARGUMENTS=${{ secrets.OPTION_ARGUMENTS }}" >> .env
-        echo "OUTPUT_CSV_FILE_NAME=${{ secrets.OUTPUT_CSV_FILE_NAME }}" >> .env
-        echo "CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver" >> .env
+        cat > .env << 'EOF'
+        MYSQL_HOSTNAME=${MYSQL_HOSTNAME}
+        MYSQL_USER=${MYSQL_USER}
+        MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        MYSQL_DATABASE=${MYSQL_DATABASE}
+        MYSQL_TABLE=${MYSQL_TABLE}
+        OPTION_ARGUMENTS=${OPTION_ARGUMENTS}
+        OUTPUT_CSV_FILE_NAME=${OUTPUT_CSV_FILE_NAME}
+        CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver
+        EOF
 
     - name: Run marathon crawling script
       run: python marathon-crawling.py
