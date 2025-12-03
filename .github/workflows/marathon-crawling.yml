@@ -52,3 +52,80 @@ jobs:
         name: marathon-data
         path: '*.csv'
         retention-days: 30
+
+    - name: Send Discord notification on success
+      if: success()
+      run: |
+        curl -X POST "${{ secrets.DISCORD_WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "embeds": [{
+              "title": "✅ Marathon Crawling 성공",
+              "description": "마라톤 크롤링 작업이 성공적으로 완료되었습니다.",
+              "color": 3066993,
+              "fields": [
+                {
+                  "name": "Repository",
+                  "value": "'"${{ github.repository }}"'",
+                  "inline": true
+                },
+                {
+                  "name": "Branch",
+                  "value": "'"${{ github.ref_name }}"'",
+                  "inline": true
+                },
+                {
+                  "name": "Commit",
+                  "value": "['"${GITHUB_SHA:0:7}"']('"${{ github.event.head_commit.url }}"')",
+                  "inline": true
+                },
+                {
+                  "name": "실행 시각",
+                  "value": "'"$(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M:%S KST')"'",
+                  "inline": false
+                }
+              ],
+              "timestamp": "'"$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"'"
+            }]
+          }'
+
+    - name: Send Discord notification on failure
+      if: failure()
+      run: |
+        curl -X POST "${{ secrets.DISCORD_WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "embeds": [{
+              "title": "❌ Marathon Crawling 실패",
+              "description": "마라톤 크롤링 작업이 실패했습니다.",
+              "color": 15158332,
+              "fields": [
+                {
+                  "name": "Repository",
+                  "value": "'"${{ github.repository }}"'",
+                  "inline": true
+                },
+                {
+                  "name": "Branch",
+                  "value": "'"${{ github.ref_name }}"'",
+                  "inline": true
+                },
+                {
+                  "name": "Commit",
+                  "value": "['"${GITHUB_SHA:0:7}"']('"${{ github.event.head_commit.url }}"')",
+                  "inline": true
+                },
+                {
+                  "name": "실행 시각",
+                  "value": "'"$(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M:%S KST')"'",
+                  "inline": false
+                },
+                {
+                  "name": "로그 확인",
+                  "value": "[GitHub Actions 로그 보기]('"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"')",
+                  "inline": false
+                }
+              ],
+              "timestamp": "'"$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"'"
+            }]
+          }'
