@@ -49,7 +49,7 @@ jobs:
           printf '%s\n' "MYSQL_TABLE=${MYSQL_TABLE}"
           printf '%s\n' "OPTION_ARGUMENTS=${OPTION_ARGUMENTS}"
           printf '%s\n' "OUTPUT_CSV_FILE_NAME=${OUTPUT_CSV_FILE_NAME}"
-          printf '%s\n' "CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver"
+          printf '%s\n' "CHROMEDRIVER_PATH="
         } > .env
 
     - name: Run marathon crawling script
