@@ -34,8 +34,16 @@ OPTION_ARGUMENTS = json.loads(os.environ.get('OPTION_ARGUMENTS'))
 for arg in OPTION_ARGUMENTS:
    options.add_argument(arg)
 
-# service = Service(ChromeDriverManager().install())
-service = Service('/usr/lib/chromium-browser/chromedriver')
+# ChromeDriver 경로 설정: 환경 변수가 있으면 사용, 없으면 webdriver-manager 사용
+CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH')
+if CHROMEDRIVER_PATH:
+    logger.info(f'Using ChromeDriver from environment variable: {CHROMEDRIVER_PATH}')
+    service = Service(CHROMEDRIVER_PATH)
+else:
+    logger.info('Using ChromeDriver from webdriver-manager')
+    from webdriver_manager.chrome import ChromeDriverManager
+    service = Service(ChromeDriverManager().install())
+
 driver = webdriver.Chrome(service=service, options=options)
 links = []
 details = []
