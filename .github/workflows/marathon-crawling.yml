@@ -41,16 +41,16 @@ jobs:
         OPTION_ARGUMENTS: ${{ secrets.OPTION_ARGUMENTS }}
         OUTPUT_CSV_FILE_NAME: ${{ secrets.OUTPUT_CSV_FILE_NAME }}
       run: |
-        cat > .env << 'EOF'
-        MYSQL_HOSTNAME=${MYSQL_HOSTNAME}
-        MYSQL_USER=${MYSQL_USER}
-        MYSQL_PASSWORD=${MYSQL_PASSWORD}
-        MYSQL_DATABASE=${MYSQL_DATABASE}
-        MYSQL_TABLE=${MYSQL_TABLE}
-        OPTION_ARGUMENTS=${OPTION_ARGUMENTS}
-        OUTPUT_CSV_FILE_NAME=${OUTPUT_CSV_FILE_NAME}
-        CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver
-        EOF
+        {
+          printf '%s\n' "MYSQL_HOSTNAME=${MYSQL_HOSTNAME}"
+          printf '%s\n' "MYSQL_USER=${MYSQL_USER}"
+          printf '%s\n' "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+          printf '%s\n' "MYSQL_DATABASE=${MYSQL_DATABASE}"
+          printf '%s\n' "MYSQL_TABLE=${MYSQL_TABLE}"
+          printf '%s\n' "OPTION_ARGUMENTS=${OPTION_ARGUMENTS}"
+          printf '%s\n' "OUTPUT_CSV_FILE_NAME=${OUTPUT_CSV_FILE_NAME}"
+          printf '%s\n' "CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver"
+        } > .env
 
     - name: Run marathon crawling script
       run: python marathon-crawling.py
